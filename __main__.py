@@ -1,13 +1,13 @@
 import click
 
-import init
-import grid_maker
+from cells import living_cells
+from grid import grid_maker
 
 import matplotlib.pyplot as plt
 
 
-def show_grid(space):
-    plt.imshow(space, cmap='binary')
+def show_grid(universe):
+    plt.imshow(universe, cmap='binary')
     plt.show()
 
 
@@ -19,7 +19,7 @@ def main(grid_size: int, random_init: bool, random_init_length: int):
     universe = grid_maker.Grid(grid_size).build_grid()
 
     if random_init:
-        random_initialisation = init.Init(universe=universe).random_init(random_init_length=random_init_length)
+        random_initialisation = living_cells.LivingCells(universe=universe).random_init(random_init_length=random_init_length)
         show_grid(random_initialisation)
     else:
         pass

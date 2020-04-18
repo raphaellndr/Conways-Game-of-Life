@@ -2,7 +2,7 @@ import random
 import numpy as np
 
 
-class Init:
+class LivingCells:
     def __init__(self, universe: np.ndarray):
         """
         Init Constructor.
