@@ -74,8 +74,8 @@ class LivingCells:
         grid = self.universe
         toad = [[0, 1, 1, 1],
                 [1, 1, 1, 0]]
-        if len(grid) % 2 == 0:
-            grid[int(len(grid) / 2):(int(len(grid) / 2) + 1), (int((len(grid) - len(toad[0])) / 2)):(int((len(grid) - len(toad[0])) / 2) + 3)] = toad
-        else:
-            pass
+
+        grid[int(len(grid) / 2) - 1:int(len(grid) / 2) + 1,
+            int((len(grid) - len(toad[0])) / 2):int((len(grid) - len(toad[0])) / 2) + 4] = toad
+
         return grid
