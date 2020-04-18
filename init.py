@@ -30,3 +30,16 @@ class Init:
         int((len(self.universe) - random_init_length) / 2):(
                 len(self.universe) - int((len(self.universe) - random_init_length) / 2))] = init
         return grid
+
+    def beacon(self):
+        grid = self.universe
+        beacon = [[1, 1, 0, 0],
+                [1, 1, 0, 0],
+                [0, 0, 1, 1],
+                [0, 0, 1, 1]]
+        grid[int((len(self.universe) - len(beacon)) / 2):(
+                len(self.universe) - int((len(self.universe) - len(beacon)) / 2)),
+        int((len(self.universe) - len(beacon)) / 2):(
+                len(self.universe) - int((len(self.universe) - len(beacon)) / 2))] = beacon
+        return grid
+

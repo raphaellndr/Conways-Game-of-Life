@@ -13,12 +13,16 @@ def show_grid(space):
 
 @click.command()
 @click.option("--grid_size", "-gs", "grid_size", type=int, default=100)
-@click.option("--init_length", "-il", "init_length", type=int, default=10)
-def main(init_length: int, grid_size: int):
+@click.option("--random_init", "-ri", "random_init", type=bool, default=False)
+@click.option("--random_init_length", "-ril", "random_init_length", type=int, default=10)
+def main(grid_size: int, random_init: bool, random_init_length: int):
     universe = grid_maker.Grid(grid_size).build_grid()
-    initialisation = init.Init(universe=universe).random_init(init_length)
 
-    show_grid(initialisation)
+    if random_init:
+        random_initialisation = init.Init(universe=universe).random_init(random_init_length=random_init_length)
+        show_grid(random_initialisation)
+    else:
+        pass
 
 
 if __name__ == '__main__':
