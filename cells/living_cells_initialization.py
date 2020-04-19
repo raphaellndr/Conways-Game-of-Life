@@ -2,10 +2,10 @@ import random
 import numpy as np
 
 
-class LivingCells:
+class LivingCellsInitialization:
     def __init__(self, universe: np.ndarray):
         """
-        LivingCells Constructor.
+        LivingCellsInitialization Constructor.
         :param universe: the blank grid we want to initialize with "living cells"
         """
         self.universe = universe

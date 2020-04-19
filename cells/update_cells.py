@@ -3,11 +3,11 @@ import numpy as np
 
 import copy
 
+
 def test(i: int, j: int, counter: int, duplication: np.ndarray) -> None:
     """
     Method that updates the cell depending on the results of the 3 rules.
     :param duplication:
-    :param grid: the universe we want to update depending on the 3 rules
     :param i: line index
     :param j: column index
     :param counter: number of neighboring living cells
@@ -29,15 +29,9 @@ class UpdateCells:
         """
         self.universe = universe
 
-    def update_cells(self) -> np.ndarray:
+    def update_cells(self, data) -> np.ndarray:
         grid = self.universe
         duplication = copy.copy(grid)
-        # left_side_indices = [-(len(grid)), -(len(grid)) + 1, 1, (len(grid)), (len(grid)) + 1]
-        # right_side_indices = [-(len(grid)), -(len(grid)) - 1, -1, (len(grid)), (len(grid)) - 1]
-        # top_side_indices = [-1, 1, (len(grid)), (len(grid)) - 1, (len(grid)) + 1]
-        # bottom_side_indices = [-1, 1, -(len(grid)), -(len(grid)) - 1, -(len(grid)) + 1]
-        # middle_indices = [-1, 1, (len(grid)), -(len(grid)), (len(grid)) + 1, (len(grid)) - 1, -(len(grid)) - 1,
-        # -(len(grid)) + 1]
         size = len(grid)
         for i in range(size):
             for j in range(size):
