@@ -1,8 +1,6 @@
 import matplotlib.animation as animation
 import numpy as np
 
-import copy
-
 
 def test(i: int, j: int, counter: int, duplication: np.ndarray) -> None:
     """
@@ -29,9 +27,9 @@ class UpdateCells:
         """
         self.universe = universe
 
-    def update_cells(self, data) -> np.ndarray:
+    def update_cells(self) -> np.ndarray:
         grid = self.universe
-        duplication = copy.copy(grid)
+        duplication = grid.copy()
         size = len(grid)
         for i in range(size):
             for j in range(size):
@@ -143,4 +141,5 @@ class UpdateCells:
                     if grid[i + 1][j + 1] == 1:
                         living_cells_counter += 1
                     test(i, j, living_cells_counter, duplication)
+        grid = duplication
         return duplication

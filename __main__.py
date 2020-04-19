@@ -30,19 +30,20 @@ def main(grid_size: int, random_init: bool, random_init_length: int, beacon: boo
         show_grid(random_initialization)
     else:
         if beacon:
-            fig = plt.figure()
             beacon_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).beacon()
-            plt.imshow(beacon_initialization, cmap='binary')
-            ani = animation.FuncAnimation(fig, update_cells.UpdateCells(universe=beacon_initialization).update_cells, interval=50, repeat=True)
-            plt.show()
+            print(beacon_initialization)
+            update = update_cells.UpdateCells(universe=beacon_initialization).update_cells()
+            print(update)
         if blinker:
             blinker_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).blinker()
+            print(blinker_initialization)
             update = update_cells.UpdateCells(universe=blinker_initialization).update_cells()
-            show_grid(update)
+            print(update)
         if toad:
             toad_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).toad()
+            print(toad_initialization)
             update = update_cells.UpdateCells(universe=toad_initialization).update_cells()
-            show_grid(update)
+            print(update)
 
 
 if __name__ == '__main__':
