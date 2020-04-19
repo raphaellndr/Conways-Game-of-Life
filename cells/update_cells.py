@@ -149,6 +149,4 @@ class UpdateCells:
                     if grid[i + 1][j + 1] == 1:
                         living_cells_counter += 1
                     test(i, j, living_cells_counter, duplication)
-        print(grid)
-        print(duplication)
         return duplication

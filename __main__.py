@@ -33,10 +33,12 @@ def main(grid_size: int, random_init: bool, random_init_length: int, beacon: boo
             show_grid(update)
         if blinker:
             blinker_initialization = living_cells.LivingCells(universe=universe).blinker()
-            show_grid(blinker_initialization)
+            update = update_cells.UpdateCells(universe=blinker_initialization).update_cells()
+            show_grid(update)
         if toad:
             toad_initialization = living_cells.LivingCells(universe=universe).toad()
-            show_grid(toad_initialization)
+            update = update_cells.UpdateCells(universe=toad_initialization).update_cells()
+            show_grid(update)
 
 
 if __name__ == '__main__':
