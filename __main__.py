@@ -1,12 +1,14 @@
 import click
 
 from .cells import living_cells
+from .cells import update_cells
 from .grid import grid_maker
 
 import matplotlib.pyplot as plt
 
 
 def show_grid(universe: grid_maker):
+    fig = plt.figure()
     plt.imshow(universe, cmap='binary')
     plt.show()
 
@@ -27,7 +29,8 @@ def main(grid_size: int, random_init: bool, random_init_length: int, beacon: boo
     else:
         if beacon:
             beacon_initialization = living_cells.LivingCells(universe=universe).beacon()
-            show_grid(beacon_initialization)
+            update = update_cells.UpdateCells(universe=beacon_initialization).update_cells()
+            show_grid(update)
         if blinker:
             blinker_initialization = living_cells.LivingCells(universe=universe).blinker()
             show_grid(blinker_initialization)

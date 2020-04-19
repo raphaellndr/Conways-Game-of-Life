@@ -5,7 +5,7 @@ import numpy as np
 class LivingCells:
     def __init__(self, universe: np.ndarray):
         """
-        Init Constructor.
+        LivingCells Constructor.
         :param universe: the blank grid we want to initialize with "living cells"
         """
         self.universe = universe
@@ -74,8 +74,6 @@ class LivingCells:
         grid = self.universe
         toad = [[0, 1, 1, 1],
                 [1, 1, 1, 0]]
-
         grid[int(len(grid) / 2) - 1:int(len(grid) / 2) + 1,
             int((len(grid) - len(toad[0])) / 2):int((len(grid) - len(toad[0])) / 2) + 4] = toad
-
         return grid
