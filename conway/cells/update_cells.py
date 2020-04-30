@@ -148,7 +148,7 @@ class UpdateCells:
         self.universe = duplication
 
     def run(self) -> None:
-        _ = animation.FuncAnimation(self.fig, self.animate, interval=500, repeat=True)
+        _ = animation.FuncAnimation(self.fig, self.animate, interval=50, repeat=True)
         plt.show()
 
     def animate(self, i: int) -> np.ndarray:
