@@ -1,7 +1,4 @@
 import click
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-import numpy as np
 
 from conway.cells import living_cells_initialization, update_cells
 from conway.grid import grid_maker
