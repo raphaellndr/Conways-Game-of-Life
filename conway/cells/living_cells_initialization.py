@@ -77,3 +77,35 @@ class LivingCellsInitialization:
         grid[int(len(grid) / 2) - 1:int(len(grid) / 2) + 1,
             int((len(grid) - len(toad[0])) / 2):int((len(grid) - len(toad[0])) / 2) + 4] = toad
         return grid
+
+    def pulsar(self):
+        """
+        Method that implements a Pulsar oscillator.
+        :return: universe with a pulsar at its center
+        """
+        grid = self.universe
+        pulsar = [[0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+                [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+                [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+                [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0],
+                [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+                [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+                [1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1],
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0]]
+
+        if len(grid) % 2 != 0:
+            grid[int((len(grid) - len(pulsar)) / 2):(
+                    len(grid) - int((len(grid) - len(pulsar)) / 2)),
+            int((len(grid) - len(pulsar)) / 2):(
+                    len(grid) - int((len(grid) - len(pulsar)) / 2))] = pulsar
+        else:
+            grid[int((len(grid) - len(pulsar)) / 2):(
+                    len(grid) - int((len(grid) - len(pulsar)) / 2 + 1)),
+            int((len(grid) - len(pulsar)) / 2):(
+                    len(grid) - int((len(grid) - len(pulsar)) / 2 + 1))] = pulsar
+        return grid
