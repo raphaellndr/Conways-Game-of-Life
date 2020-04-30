@@ -15,8 +15,6 @@ from conway.grid import grid_maker
 @click.option("--blinker", "-bl", "blinker", is_flag=True)
 @click.option("--toad", "-t", "toad", is_flag=True)
 def main(grid_size: int, random_init: bool, random_init_length: int, beacon: bool, blinker: bool, toad: bool) -> None:
-    global beacon_initialization
-
     universe = grid_maker.Grid(grid_size).build_grid()
 
     if random_init:
