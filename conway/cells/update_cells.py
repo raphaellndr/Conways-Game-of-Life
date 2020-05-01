@@ -1,3 +1,5 @@
+import time
+
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
@@ -28,26 +30,31 @@ class UpdateCells:
         self.universe = universe
         self.fig = plt.figure()
         self.im = plt.imshow(universe, cmap='binary')
-        self.max_x = universe.shape[0] - 1
+        self.max_x = universe.shape[0]
         self.min_x = 0
-        self.max_y = universe.shape[1] - 1
+        self.max_y = universe.shape[1]
         self.min_y = 0
 
     def update_cells(self) -> None:
+        start = time.time()
+
         grid = self.universe
         duplication = grid.copy()
 
         positions = np.argwhere(grid == 1)
         for pos in positions:
             x, y = pos
-            new_pos = np.array([[x+i, y+j] for i in range(-1, 2) for j in range(-1, 2) if i != j])
+            min_y = max(y - 1, 0)
+            max_y = min(y + 2, self.max_y)
+            min_x = max(x - 1, 0)
+            max_x = min(x + 2, self.max_x)
+            new_pos = np.array([[i, j] for i in range(min_x, max_x) for j in range(min_y, max_y) if i != x or j != y])
             for new in new_pos:
                 if not any(np.equal(positions, new).all(axis=-1)):
                     positions = np.concatenate((positions, np.expand_dims(new, axis=0)))
 
         for position in positions:
             x, y = position
-            # print(f"x: {x}, y: {y}")
             min_y = max(y-1, 0)
             max_y = min(y+2, self.max_y)
             min_x = max(x-1, 0)
@@ -62,6 +69,8 @@ class UpdateCells:
             update_cell(x, y, int(sum_of_cells), duplication)
 
         self.universe = duplication
+
+        print(f"Elapsed time: {time.time() - start}")
 
     def animate(self, i: int) -> np.ndarray:
         self.update_cells()
