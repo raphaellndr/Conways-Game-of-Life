@@ -1,30 +1,13 @@
-import time
-
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
-
-
-def update_cell(i: int, j: int, counter: int, duplication: np.ndarray) -> None:
-    """
-    Method that updates the cell depending on the results of the 3 rules.
-
-    :param duplication:
-    :param i: line index
-    :param j: column index
-    :param counter: number of neighboring living cells
-    :return:
-    """
-    if counter == 3:
-        duplication[i][j] = 1
-    if counter < 2 or counter > 3:
-        duplication[i][j] = 0
 
 
 class UpdateCells:
     def __init__(self, universe: np.ndarray):
         """
         UpdateCells Constructor.
+
         :param universe: the blank grid we want to initialize with "living cells"
         """
         self.universe = universe
@@ -65,7 +48,10 @@ class UpdateCells:
                         continue
                     sum_of_cells += grid[i, j]
 
-            update_cell(x, y, int(sum_of_cells), duplication)
+            if sum_of_cells == 3:
+                duplication[x][y] = 1
+            if sum_of_cells < 2 or sum_of_cells > 3:
+                duplication[x][y] = 0
 
         self.universe = duplication
 
@@ -77,5 +63,3 @@ class UpdateCells:
     def run(self, speed: int) -> None:
         _ = animation.FuncAnimation(self.fig, self.animate, interval=speed, repeat=True)
         plt.show()
-
-

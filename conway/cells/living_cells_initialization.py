@@ -6,6 +6,7 @@ class LivingCellsInitialization:
     def __init__(self, universe: np.ndarray):
         """
         LivingCellsInitialization Constructor.
+
         :param universe: the blank grid we want to initialize with "living cells"
         """
         self.universe = universe
@@ -14,6 +15,7 @@ class LivingCellsInitialization:
         """
         Method that implements a random initialization for the Conway's
         Game-of-Life.
+
         :param random_init_length: length of the random initialization
         :return: grid with a random centered initialization
         """
@@ -34,6 +36,7 @@ class LivingCellsInitialization:
     def beacon(self) -> np.ndarray:
         """
         Method that implements a Beacon oscillator.
+
         :return: universe with a beacon at its center
         """
         grid = self.universe
@@ -56,6 +59,7 @@ class LivingCellsInitialization:
     def blinker(self) -> np.ndarray:
         """
         Method that implements a Blinker oscillator.
+
         :return: universe with a blinker at its center
         """
         grid = self.universe
@@ -69,6 +73,7 @@ class LivingCellsInitialization:
     def toad(self) -> np.ndarray:
         """
         Method that implements a Toad oscillator.
+
         :return: universe with a toad at its center
         """
         grid = self.universe
@@ -81,6 +86,7 @@ class LivingCellsInitialization:
     def pulsar(self):
         """
         Method that implements a Pulsar oscillator.
+
         :return: universe with a pulsar at its center
         """
         grid = self.universe
@@ -113,6 +119,7 @@ class LivingCellsInitialization:
     def gosper_glider_gun(self):
         """
         Method that implements a Gosper glider gun.
+
         :return: universe with a gosper glider gun at its center
         """
         grid = self.universe
