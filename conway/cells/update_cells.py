@@ -29,11 +29,46 @@ class UpdateCells:
         self.universe = universe
         self.fig = plt.figure()
         self.im = plt.imshow(universe, cmap='binary')
+        self.max_x = universe.shape[0]
+        self.min_x = 0
+        self.max_y = universe.shape[1]
+        self.min_y = 0
+
 
     def update_cells(self) -> None:
         grid = self.universe
         duplication = grid.copy()
         size = len(grid)
+
+        positions = np.argwhere(grid == 1)
+        for pos in positions:
+            x, y = pos
+            new_pos = np.array([[x+i, y+j] for i in range(-1, 2) for j in range(-1, 2) if i != j])
+            for new in new_pos:
+                if not any(np.equal(positions, new).all(axis=-1)):
+                    positions = np.concatenate((positions, np.expand_dims(new, axis=0)))
+
+        # ones_pos_t = positions.T
+        # ones_pos_t = (ones_pos_t[0], ones_pos_t[1])
+
+        for position in positions:
+            x, y = position
+            print(f"x: {x}, y: {y}")
+            min_y = max(y-1, 0)
+            max_y = min(y+1, self.max_y)
+            min_x = max(x-1, 0)
+            max_x = min(x+1, self.max_x)
+            for i in range(min_x, max_x):
+                for j in range(min_y, max_y):
+                    if i == j:
+                        continue
+                    print(i, j)
+            # print(x, y)
+
+        exit(0)
+
+        # print(np.where(grid == 1))
+        # print(grid[np.where(grid == 1)])
         for i in range(size):
             for j in range(size):
                 living_cells_counter = 0
