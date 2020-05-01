@@ -47,9 +47,6 @@ class UpdateCells:
                 if not any(np.equal(positions, new).all(axis=-1)):
                     positions = np.concatenate((positions, np.expand_dims(new, axis=0)))
 
-        # ones_pos_t = positions.T
-        # ones_pos_t = (ones_pos_t[0], ones_pos_t[1])
-
         for position in positions:
             x, y = position
             print(f"x: {x}, y: {y}")
@@ -57,127 +54,14 @@ class UpdateCells:
             max_y = min(y+2, self.max_y)
             min_x = max(x-1, 0)
             max_x = min(x+2, self.max_x)
+            sum_of_cells = 0
             for i in range(min_x, max_x):
                 for j in range(min_y, max_y):
                     if i == x and j == y:
                         continue
-                    print([i, j], "->", grid[i, j])
-            # print(x, y)
+                    sum_of_cells += grid[i, j]
 
-        exit(0)
-
-        # print(np.where(grid == 1))
-        # print(grid[np.where(grid == 1)])
-        for i in range(size):
-            for j in range(size):
-                living_cells_counter = 0
-                # top left hand corner
-                if i == 0 == j:
-                    if grid[i][j + 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i + 1][j] == 1:
-                        living_cells_counter += 1
-                    if grid[i + 1][j + 1] == 1:
-                        living_cells_counter += 1
-                    test(i, j, living_cells_counter, duplication)
-                # top right hand corner
-                elif i == 0 and j == size - 1:
-                    if grid[i][j - 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i + 1][j] == 1:
-                        living_cells_counter += 1
-                    if grid[i + 1][j - 1] == 1:
-                        living_cells_counter += 1
-                    test(i, j, living_cells_counter, duplication)
-                # bottom left hand corner
-                elif i == size - 1 and j == 0:
-                    if grid[i][j + 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i - 1][j] == 1:
-                        living_cells_counter += 1
-                    if grid[i - 1][j + 1] == 1:
-                        living_cells_counter += 1
-                    test(i, j, living_cells_counter, duplication)
-                # bottom right hand corner
-                elif i == size - 1 == j:
-                    if grid[i][j - 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i - 1][j] == 1:
-                        living_cells_counter += 1
-                    if grid[i - 1][j - 1] == 1:
-                        living_cells_counter += 1
-                    test(i, j, living_cells_counter, duplication)
-                # top side
-                elif i == 0 and (j != 0 and j != size - 1):
-                    if grid[i][j - 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i][j + 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i + 1][j - 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i + 1][j] == 1:
-                        living_cells_counter += 1
-                    if grid[i + 1][j + 1] == 1:
-                        living_cells_counter += 1
-                    test(i, j, living_cells_counter, duplication)
-                # bottom side
-                elif i == size - 1 and (j != 0 and j != size - 1):
-                    if grid[i][j - 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i][j + 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i - 1][j - 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i - 1][j] == 1:
-                        living_cells_counter += 1
-                    if grid[i - 1][j + 1] == 1:
-                        living_cells_counter += 1
-                    test(i, j, living_cells_counter, duplication)
-                # left side
-                elif j == 0 and (i != 0 and i != size - 1):
-                    if grid[i][j + 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i - 1][j] == 1:
-                        living_cells_counter += 1
-                    if grid[i - 1][j + 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i + 1][j] == 1:
-                        living_cells_counter += 1
-                    if grid[i + 1][j + 1] == 1:
-                        living_cells_counter += 1
-                    test(i, j, living_cells_counter, duplication)
-                # right side
-                elif j == size - 1 and (i != 0 and i != size - 1):
-                    if grid[i][j - 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i - 1][j] == 1:
-                        living_cells_counter += 1
-                    if grid[i - 1][j - 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i + 1][j] == 1:
-                        living_cells_counter += 1
-                    if grid[i + 1][j - 1] == 1:
-                        living_cells_counter += 1
-                    test(i, j, living_cells_counter, duplication)
-                # rest of the grid
-                else:
-                    if grid[i][j - 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i][j + 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i - 1][j - 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i - 1][j] == 1:
-                        living_cells_counter += 1
-                    if grid[i - 1][j + 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i + 1][j - 1] == 1:
-                        living_cells_counter += 1
-                    if grid[i + 1][j] == 1:
-                        living_cells_counter += 1
-                    if grid[i + 1][j + 1] == 1:
-                        living_cells_counter += 1
-                    test(i, j, living_cells_counter, duplication)
+            test(x, y, int(sum_of_cells), duplication)
 
         self.universe = duplication
 
