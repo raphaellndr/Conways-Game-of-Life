@@ -34,7 +34,6 @@ class UpdateCells:
         self.max_y = universe.shape[1]
         self.min_y = 0
 
-
     def update_cells(self) -> None:
         grid = self.universe
         duplication = grid.copy()
@@ -55,14 +54,14 @@ class UpdateCells:
             x, y = position
             print(f"x: {x}, y: {y}")
             min_y = max(y-1, 0)
-            max_y = min(y+1, self.max_y)
+            max_y = min(y+2, self.max_y)
             min_x = max(x-1, 0)
-            max_x = min(x+1, self.max_x)
+            max_x = min(x+2, self.max_x)
             for i in range(min_x, max_x):
                 for j in range(min_y, max_y):
-                    if i == j:
+                    if i == x and j == y:
                         continue
-                    print(i, j)
+                    print([i, j], "->", grid[i, j])
             # print(x, y)
 
         exit(0)
