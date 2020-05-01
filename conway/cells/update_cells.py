@@ -57,10 +57,12 @@ class UpdateCells:
             min_y = max(y-1, 0)
             max_y = min(y+1, self.max_y)
             min_x = max(x-1, 0)
-            max_x = max(x+1, self.max_x)
+            max_x = min(x+1, self.max_x)
             for i in range(min_x, max_x):
                 for j in range(min_y, max_y):
-                    print(i, y)
+                    if i == j:
+                        continue
+                    print(i, j)
             # print(x, y)
 
         exit(0)
