@@ -13,6 +13,7 @@ from conway.grid import grid_maker
 @click.option("--blinker", "-bl", "blinker", is_flag=True)
 @click.option("--toad", "-t", "toad", is_flag=True)
 @click.option("--pulsar", "-p", "pulsar", is_flag=True)
+@click.option("--gosper_glider_gun", "-ggg", "gosper_glider_gun", is_flag=True)
 def main(grid_size: int,
          speed: int,
          random_init: bool,
@@ -20,7 +21,8 @@ def main(grid_size: int,
          beacon: bool,
          blinker: bool,
          toad: bool,
-         pulsar: bool) -> None:
+         pulsar: bool,
+         gosper_glider_gun: bool) -> None:
 
     universe = grid_maker.Grid(grid_size).build_grid()
 
@@ -44,6 +46,10 @@ def main(grid_size: int,
         elif pulsar:
             pulsar_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).pulsar()
             matrix = update_cells.UpdateCells(universe=pulsar_initialization)
+            matrix.run(speed)
+        elif gosper_glider_gun:
+            ggg_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).gosper_glider_gun()
+            matrix = update_cells.UpdateCells(universe=ggg_initialization)
             matrix.run(speed)
 
 

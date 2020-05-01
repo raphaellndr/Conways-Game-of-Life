@@ -3,9 +3,10 @@ import matplotlib.animation as animation
 import numpy as np
 
 
-def test(i: int, j: int, counter: int, duplication: np.ndarray) -> None:
+def update_cell(i: int, j: int, counter: int, duplication: np.ndarray) -> None:
     """
     Method that updates the cell depending on the results of the 3 rules.
+
     :param duplication:
     :param i: line index
     :param j: column index
@@ -14,8 +15,6 @@ def test(i: int, j: int, counter: int, duplication: np.ndarray) -> None:
     """
     if counter == 3:
         duplication[i][j] = 1
-    if counter == 2:
-        pass
     if counter < 2 or counter > 3:
         duplication[i][j] = 0
 
@@ -29,15 +28,14 @@ class UpdateCells:
         self.universe = universe
         self.fig = plt.figure()
         self.im = plt.imshow(universe, cmap='binary')
-        self.max_x = universe.shape[0]
+        self.max_x = universe.shape[0] - 1
         self.min_x = 0
-        self.max_y = universe.shape[1]
+        self.max_y = universe.shape[1] - 1
         self.min_y = 0
 
     def update_cells(self) -> None:
         grid = self.universe
         duplication = grid.copy()
-        size = len(grid)
 
         positions = np.argwhere(grid == 1)
         for pos in positions:
@@ -49,7 +47,7 @@ class UpdateCells:
 
         for position in positions:
             x, y = position
-            print(f"x: {x}, y: {y}")
+            # print(f"x: {x}, y: {y}")
             min_y = max(y-1, 0)
             max_y = min(y+2, self.max_y)
             min_x = max(x-1, 0)
@@ -61,7 +59,7 @@ class UpdateCells:
                         continue
                     sum_of_cells += grid[i, j]
 
-            test(x, y, int(sum_of_cells), duplication)
+            update_cell(x, y, int(sum_of_cells), duplication)
 
         self.universe = duplication
 
