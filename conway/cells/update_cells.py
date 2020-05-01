@@ -180,11 +180,13 @@ class UpdateCells:
 
         self.universe = duplication
 
-    def run(self) -> None:
-        _ = animation.FuncAnimation(self.fig, self.animate, interval=500, repeat=True)
-        plt.show()
-
     def animate(self, i: int) -> np.ndarray:
         self.update_cells()
         self.im.set_data(self.universe)
         return self.im
+
+    def run(self, speed: int) -> None:
+        _ = animation.FuncAnimation(self.fig, self.animate, interval=speed, repeat=True)
+        plt.show()
+
+
