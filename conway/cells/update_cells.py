@@ -36,7 +36,6 @@ class UpdateCells:
         self.min_y = 0
 
     def update_cells(self) -> None:
-        start = time.time()
 
         grid = self.universe
         duplication = grid.copy()
@@ -69,8 +68,6 @@ class UpdateCells:
             update_cell(x, y, int(sum_of_cells), duplication)
 
         self.universe = duplication
-
-        print(f"Elapsed time: {time.time() - start}")
 
     def animate(self, i: int) -> np.ndarray:
         self.update_cells()
