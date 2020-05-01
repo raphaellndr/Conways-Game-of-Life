@@ -20,11 +20,11 @@ class LivingCellsInitialization:
         grid = self.universe
         init = []
         for i in range(random_init_length):
-            randomList = []
+            random_list = []
             for j in range(random_init_length):
                 n = random.randint(0, 1)
-                randomList.append(n)
-            init.append(randomList)
+                random_list.append(n)
+            init.append(random_list)
         grid[int((len(self.universe) - random_init_length) / 2):(
                 len(self.universe) - int((len(self.universe) - random_init_length) / 2)),
         int((len(self.universe) - random_init_length) / 2):(

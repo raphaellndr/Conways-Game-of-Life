@@ -27,7 +27,7 @@ def main(grid_size: int,
     if random_init:
         random_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).random_init(random_init_length=random_init_length)
         matrix = update_cells.UpdateCells(universe=random_initialization)
-        matrix.run()
+        matrix.run(speed)
     else:
         if beacon:
             beacon_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).beacon()
