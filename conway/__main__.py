@@ -34,7 +34,7 @@ def main(grid_size: int,
         if beacon:
             beacon_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).beacon()
             matrix = update_cells.UpdateCells(universe=beacon_initialization)
-            matrix.run(speed)
+            matrix.run_v2()
         elif blinker:
             blinker_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).blinker()
             matrix = update_cells.UpdateCells(universe=blinker_initialization)
