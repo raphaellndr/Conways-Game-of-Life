@@ -32,38 +32,41 @@ class UpdateCells:
         self.threads: typing.List[threading.Thread] = []
 
         self.__is_alive = True
+        self.speed: float = 0.0001
 
         self._init_threads()
 
         self.update_ok: int = 0
-        self.mutex = threading.Lock()
+        self.mutex_positions = threading.Lock()
         self.mutex_end_update = threading.Lock()
-        self.barrier_looking_for_positions = threading.Barrier(len(self.threads) - 1)
-        self.event_end_of_compute = threading.Event()
+        self.cond_looking_for_positions = threading.Condition()
         self.event_compute_results = threading.Event()
 
     def _init_threads(self):
         # Create new threads
         thread0 = threading.Thread(target=self.update_cells_v2)
-        thread1 = threading.Thread(target=self.looking_for_positions, args=(1,))
-        thread2 = threading.Thread(target=self.looking_for_positions, args=(2,))
-        thread3 = threading.Thread(target=self.looking_for_positions, args=(3,))
-        thread4 = threading.Thread(target=self.looking_for_positions, args=(4,))
+        thread1 = threading.Thread(target=self.looking_for_positions, args=(0,))
+        thread2 = threading.Thread(target=self.looking_for_positions, args=(1,))
+        thread3 = threading.Thread(target=self.looking_for_positions, args=(2,))
+        thread4 = threading.Thread(target=self.looking_for_positions, args=(3,))
 
         # Add threads to thread list
-        self.threads.append(thread0)
         self.threads.append(thread1)
         self.threads.append(thread2)
         self.threads.append(thread3)
         self.threads.append(thread4)
+        self.threads.append(thread0)
 
     def _run_threads(self):
         # Start new Threads
         for t in self.threads:
             t.start()
+            time.sleep(0.25)
 
         # Wait for all threads to complete
         try:
+            speed = max(10, min(int(self.speed*1000), 1000))
+            self.run_v1(speed)
             while True:
                 time.sleep(2)
         except KeyboardInterrupt:
@@ -75,48 +78,42 @@ class UpdateCells:
         with self.mutex_end_update:
             self.update_ok += 1
             if self.update_ok == len(self.threads) - 1:
-                print("YOLO")
                 self.update_ok = 0
                 self.event_compute_results.set()
 
-                self.event_end_of_compute.wait()
-                self.event_end_of_compute.clear()
-
     def looking_for_positions(self, position_id: int):
         while self.__is_alive:
-            print(f"looking_for_positions, waiting: {position_id}")
-            self.barrier_looking_for_positions.wait()
+            with self.cond_looking_for_positions:
+                self.cond_looking_for_positions.wait()
 
             positions = self.positions[position_id]
-            if position_id == 0:
-                print(len(positions))
             for pos in positions:
                 x, y = pos
                 min_y = max(y - 1, 0)
                 max_y = min(y + 2, self.max_y)
                 min_x = max(x - 1, 0)
                 max_x = min(x + 2, self.max_x)
-                new_pos = np.array([[i, j] for i in range(min_x, max_x) for j in range(min_y, max_y) if i != x or j != y])
+                new_pos = np.array(
+                    [[i, j] for i in range(min_x, max_x) for j in range(min_y, max_y) if i != x or j != y])
                 for new in new_pos:
                     if not any(np.equal(positions, new).all(axis=-1)):
                         positions = np.concatenate((positions, np.expand_dims(new, axis=0)))
-            if position_id == 0:
-                print(len(positions))
-            with self.mutex:
+
+            with self.mutex_positions:
                 self.positions[position_id] = positions
 
             self.end_update()
 
     def update_cells_v2(self):
         while self.__is_alive:
-            print("update_cells_v2")
             duplication = self.universe.copy()
             positions = np.argwhere(self.universe == 1)
-            print(positions.shape)
-            positions = np.array_split(positions, len(self.threads))
+            positions = np.array_split(positions, len(self.threads) - 1)
 
             self.positions = [position for position in positions]
 
+            with self.cond_looking_for_positions:
+                self.cond_looking_for_positions.notifyAll()
             self.event_compute_results.wait()
             self.event_compute_results.clear()
 
@@ -145,9 +142,7 @@ class UpdateCells:
                     duplication[x][y] = 0
 
             self.universe = duplication
-            print(self.universe)
-
-            self.event_end_of_compute.set()
+            time.sleep(self.speed)
 
     def update_cells_v1(self) -> None:
         duplication = self.universe.copy()
@@ -164,6 +159,8 @@ class UpdateCells:
                 if not any(np.equal(positions, new).all(axis=-1)):
                     positions = np.concatenate((positions, np.expand_dims(new, axis=0)))
 
+        # Remove duplicates
+        positions = np.unique(positions, axis=0)
         for position in positions:
             x, y = position
             min_y = max(y - 1, 0)
@@ -185,7 +182,8 @@ class UpdateCells:
         self.universe = duplication
 
     def animate(self, i: int) -> np.ndarray:
-        self.update_cells()
+        if not self.threads:
+            self.update_cells_v1()
         self.im.set_data(self.universe)
         return self.im
 
@@ -193,5 +191,6 @@ class UpdateCells:
         _ = animation.FuncAnimation(self.fig, self.animate, interval=speed, repeat=True)
         plt.show()
 
-    def run_v2(self) -> None:
+    def run_v2(self, speed: float) -> None:
+        self.speed = speed
         self._run_threads()
