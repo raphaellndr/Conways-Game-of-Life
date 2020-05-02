@@ -6,7 +6,7 @@ from conway.grid import grid_maker
 
 @click.command()
 @click.option("--grid_size", "-gs", "grid_size", type=int, default=100)
-@click.option("--speed", "-s", "speed", type=int, default=100)
+@click.option("--speed", "-s", "speed", type=int, default=50)
 @click.option("--random_init", "-ri", "random_init", is_flag=True)
 @click.option("--random_init_length", "-ril", "random_init_length", type=int, default=10)
 @click.option("--beacon", "-bc", "beacon", is_flag=True)
