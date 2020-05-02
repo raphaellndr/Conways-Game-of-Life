@@ -20,10 +20,9 @@ class UpdateCells:
 
     def update_cells(self) -> None:
 
-        grid = self.universe
-        duplication = grid.copy()
+        duplication = self.universe.copy()
 
-        positions = np.argwhere(grid == 1)
+        positions = np.argwhere(self.universe == 1)
         for pos in positions:
             x, y = pos
             min_y = max(y - 1, 0)
@@ -46,7 +45,7 @@ class UpdateCells:
                 for j in range(min_y, max_y):
                     if i == x and j == y:
                         continue
-                    sum_of_cells += grid[i, j]
+                    sum_of_cells += self.universe[i, j]
 
             if sum_of_cells == 3:
                 duplication[x][y] = 1
