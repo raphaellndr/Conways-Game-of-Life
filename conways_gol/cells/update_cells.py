@@ -1,4 +1,4 @@
-from multiprocessing import Process
+import multiprocessing
 import time
 import threading
 import typing
@@ -29,7 +29,7 @@ class UpdateCells:
         self.slices: typing.List[np.ndarray] = []
         self.positions: typing.List[np.ndarray] = []
 
-        self.threads: typing.List[threading.Thread] = []
+        self.processes: typing.List[multiprocessing.Process] = []
 
         self.__is_alive = True
         self.speed: float = 0.0001
@@ -37,29 +37,29 @@ class UpdateCells:
         self._init_threads()
 
         self.update_ok: int = 0
-        self.mutex_positions = threading.Lock()
-        self.mutex_end_update = threading.Lock()
-        self.cond_looking_for_positions = threading.Condition()
-        self.event_compute_results = threading.Event()
+        self.mutex_positions = multiprocessing.Lock()
+        self.mutex_end_update = multiprocessing.Lock()
+        self.cond_looking_for_positions = multiprocessing.Condition()
+        self.event_compute_results = multiprocessing.Event()
 
     def _init_threads(self):
         # Create new threads
-        thread0 = threading.Thread(target=self.update_cells_v2)
-        thread1 = threading.Thread(target=self.looking_for_positions, args=(0,))
-        thread2 = threading.Thread(target=self.looking_for_positions, args=(1,))
-        thread3 = threading.Thread(target=self.looking_for_positions, args=(2,))
-        thread4 = threading.Thread(target=self.looking_for_positions, args=(3,))
+        process0 = multiprocessing.Process(target=self.update_cells_v2)
+        process1 = multiprocessing.Process(target=self.looking_for_positions, args=(0,))
+        process2 = multiprocessing.Process(target=self.looking_for_positions, args=(1,))
+        process3 = multiprocessing.Process(target=self.looking_for_positions, args=(2,))
+        process4 = multiprocessing.Process(target=self.looking_for_positions, args=(3,))
 
         # Add threads to thread list
-        self.threads.append(thread1)
-        self.threads.append(thread2)
-        self.threads.append(thread3)
-        self.threads.append(thread4)
-        self.threads.append(thread0)
+        self.processes.append(process1)
+        self.processes.append(process2)
+        self.processes.append(process3)
+        self.processes.append(process4)
+        self.processes.append(process0)
 
     def _run_threads(self):
         # Start new Threads
-        for t in self.threads:
+        for t in self.processes:
             t.start()
             time.sleep(0.25)
 
@@ -71,13 +71,13 @@ class UpdateCells:
                 time.sleep(2)
         except KeyboardInterrupt:
             self.__is_alive = False
-            for t in self.threads:
+            for t in self.processes:
                 t.join()
 
     def end_update(self):
         with self.mutex_end_update:
             self.update_ok += 1
-            if self.update_ok == len(self.threads) - 1:
+            if self.update_ok == len(self.processes) - 1:
                 self.update_ok = 0
                 self.event_compute_results.set()
 
@@ -108,12 +108,12 @@ class UpdateCells:
         while self.__is_alive:
             duplication = self.universe.copy()
             positions = np.argwhere(self.universe == 1)
-            positions = np.array_split(positions, len(self.threads) - 1)
+            positions = np.array_split(positions, len(self.processes) - 1)
 
             self.positions = [position for position in positions]
 
             with self.cond_looking_for_positions:
-                self.cond_looking_for_positions.notifyAll()
+                self.cond_looking_for_positions.notify_all()
             self.event_compute_results.wait()
             self.event_compute_results.clear()
 
@@ -182,7 +182,7 @@ class UpdateCells:
         self.universe = duplication
 
     def animate(self, i: int) -> np.ndarray:
-        if not self.threads:
+        if not self.processes:
             self.update_cells_v1()
         self.im.set_data(self.universe)
         return self.im
