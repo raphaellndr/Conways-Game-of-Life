@@ -1,6 +1,6 @@
 import click
 
-from conways_gol.cells import living_cells_initialization, update_cells
+from conways_gol.cells import living_cells_initialization, update_cells_multiprocessing, update_cells_multithreading
 from conways_gol.grid import grid_maker
 
 
@@ -28,28 +28,28 @@ def main(grid_size: int,
 
     if random_init:
         random_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).random_init(random_init_length=random_init_length)
-        matrix = update_cells.UpdateCells(universe=random_initialization)
+        matrix = update_cells_multithreading.UpdateCells(universe=random_initialization)
         matrix.run_v2(speed)
     else:
         if beacon:
             beacon_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).beacon()
-            matrix = update_cells.UpdateCells(universe=beacon_initialization)
+            matrix = update_cells_multithreading.UpdateCells(universe=beacon_initialization)
             matrix.run_v2(speed)
         elif blinker:
             blinker_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).blinker()
-            matrix = update_cells.UpdateCells(universe=blinker_initialization)
+            matrix = update_cells_multithreading.UpdateCells(universe=blinker_initialization)
             matrix.run_v2(speed)
         elif toad:
             toad_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).toad()
-            matrix = update_cells.UpdateCells(universe=toad_initialization)
+            matrix = update_cells_multithreading.UpdateCells(universe=toad_initialization)
             matrix.run_v2(speed)
         elif pulsar:
             pulsar_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).pulsar()
-            matrix = update_cells.UpdateCells(universe=pulsar_initialization)
+            matrix = update_cells_multithreading.UpdateCells(universe=pulsar_initialization)
             matrix.run_v2(speed)
         elif gosper_glider_gun:
             ggg_initialization = living_cells_initialization.LivingCellsInitialization(universe=universe).gosper_glider_gun()
-            matrix = update_cells.UpdateCells(universe=ggg_initialization)
+            matrix = update_cells_multithreading.UpdateCells(universe=ggg_initialization)
             matrix.run_v2(speed)
 
 
