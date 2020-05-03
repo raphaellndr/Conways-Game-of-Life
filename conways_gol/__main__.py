@@ -6,6 +6,9 @@ from conways_gol.grid import grid_maker
 
 @click.command()
 @click.option("--grid_size", "-gs", "grid_size", type=int, default=100)
+@click.option("--threading", "-t", "use_threading", is_flag=True)
+@click.option("--multiprocessing", "-mt", "use_multiprocessing", is_flag=True)
+@click.option("--gosper_glider_gun", "-ggg", "gosper_glider_gun", is_flag=True)
 @click.option("--speed", "-s", "speed", type=float, default=0.005)
 @click.option("--random_init", "-ri", "random_init", is_flag=True)
 @click.option("--random_init_length", "-ril", "random_init_length", type=int, default=10)
@@ -22,7 +25,9 @@ def main(grid_size: int,
          blinker: bool,
          toad: bool,
          pulsar: bool,
-         gosper_glider_gun: bool) -> None:
+         gosper_glider_gun: bool,
+         use_threading: bool,
+         use_multiprocessing: bool) -> None:
 
     universe = grid_maker.Grid(grid_size).build_grid()
 
