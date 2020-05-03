@@ -1,7 +1,7 @@
 import click
 
-from conway.cells import living_cells_initialization, update_cells
-from conway.grid import grid_maker
+from conways_gol.cells import living_cells_initialization, update_cells
+from conways_gol.grid import grid_maker
 
 
 @click.command()
