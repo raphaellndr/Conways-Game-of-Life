@@ -8,15 +8,14 @@ from conways_gol.grid import grid_maker
 @click.option("--grid_size", "-gs", "grid_size", type=int, default=100)
 @click.option("--threading", "-t", "use_threading", is_flag=True)
 @click.option("--multiprocessing", "-mt", "use_multiprocessing", is_flag=True)
-@click.option("--gosper_glider_gun", "-ggg", "gosper_glider_gun", is_flag=True)
 @click.option("--speed", "-s", "speed", type=float, default=0.005)
 @click.option("--random_init", "-ri", "random_init", is_flag=True)
 @click.option("--random_init_length", "-ril", "random_init_length", type=int, default=10)
-@click.option("--beacon", "-bc", "beacon", is_flag=True)
-@click.option("--blinker", "-bl", "blinker", is_flag=True)
-@click.option("--toad", "-t", "toad", is_flag=True)
-@click.option("--pulsar", "-p", "pulsar", is_flag=True)
-@click.option("--gosper_glider_gun", "-ggg", "gosper_glider_gun", is_flag=True)
+@click.option("--beacon", "-beacon", "beacon", is_flag=True)
+@click.option("--blinker", "-blinker", "blinker", is_flag=True)
+@click.option("--toad", "-toad", "toad", is_flag=True)
+@click.option("--pulsar", "-pulsar", "pulsar", is_flag=True)
+@click.option("--gosper_glider_gun", "-gosper_glider_gun", "gosper_glider_gun", is_flag=True)
 def main(grid_size: int,
          speed: int,
          random_init: bool,
