@@ -105,4 +105,4 @@ Game of Life app". Thanks for reading this far and stay tuned !
     :target: https://github.com/raphaellndr/Conways-Game-of-Life/blob/master/LICENSEfe
 
 .. |python| image:: https://img.shields.io/github/pipenv/locked/python-version/raphaellndr/Conways-Game-of-Life
-    :alt: GitHub Pipenv locked Python version
+    :target: https://www.python.org/downloads/release/python-376/
