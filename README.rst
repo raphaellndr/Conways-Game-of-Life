@@ -11,7 +11,7 @@ as multiprocessing or the use of `Ray <https://github.com/ray-project/ray>`_ are
 Requirements
 ============
 
-Before running the code, you should consider using a virtual environment. To do so, you can either use conda or pip :
+Before running the code, you should consider using a virtual environment. To do so, you can either use pip or conda :
 
 Using pip :
 -----------
