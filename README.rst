@@ -59,7 +59,7 @@ if not, `install Anaconda <https://www.anaconda.com/products/individual>`_.
 Run the code
 ============
 
-Before you can have some fun "playing" Conway's Game of Life, you should at least learn how to run the code. So here are all
+Before you can have some fun "playing" Conway's Game of Life, you should at least know how to run the code. So here are all
 the commands yet implemented.
 
 Main commands :
