@@ -6,7 +6,7 @@ Conway's Game of Life
 This project is a Python personal implementation of the well-known "`Game of Life <https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life>`_",
 written using object-oriented programming.
 Although it is not said to be fully optimized, multithreading is being used to speed up the program, and other methods such
-as multiprocessing or the use of `Ray <https://github.com/ray-project/ray>`_ are currently being implemented.
+as multiprocessing or the use of `charm4py <https://charm4py.readthedocs.io/en/latest/charm-api.html>`_ are currently being implemented.
 
 Requirements
 ============
