@@ -1,18 +1,15 @@
 import multiprocessing
 import os
 import time
-import threading
 import typing
+import psutil
 
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import numpy as np
 
-
-# python -m conway -gs 100 -ri -ril 50
-# python -m conway -gs 10 -bc
-
 PROCESSES: typing.List[multiprocessing.Process] = []
+PAUSE: bool = False
 
 
 class UpdateCells:
@@ -49,11 +46,15 @@ class UpdateCells:
         self.__is_alive = True
         self.speed: float = 0.0001
 
+        self.iterations: int = 0
+
+        self.list = list()
+
     def _init_processes(self):
         global PROCESSES
 
         # Create new processes and add each process to process list
-        for i in range(multiprocessing.cpu_count()-1):
+        for i in range(multiprocessing.cpu_count() - 1):
             PROCESSES.append(multiprocessing.Process(
                 target=looking_for_positions,
                 args=(self,
@@ -76,6 +77,8 @@ class UpdateCells:
         # Start new processes
         for p in PROCESSES:
             p.start()
+            # m = psutil.Process(p.pid)
+            # self.list.append(m)
             time.sleep(0.1)
 
         # Wait for all processes to complete
@@ -97,40 +100,36 @@ class UpdateCells:
 
     @staticmethod
     def end_update(
-        mutex_end_update: multiprocessing.Lock,
-        event_compute_results: multiprocessing.Event,
-        update_ok: multiprocessing.Value
+            mutex_end_update: multiprocessing.Lock,
+            event_compute_results: multiprocessing.Event,
+            update_ok: multiprocessing.Value
     ):
         """
-
-
         :param mutex_end_update:
         :param event_compute_results:
         :param update_ok:
         """
 
-        print(f"[{os.getpid()}] end_update value: {update_ok.value}")
+        # print(f"[{os.getpid()}] end_update value: {update_ok.value}")
 
         with mutex_end_update:
             update_ok.value += 1
-            if update_ok.value == multiprocessing.cpu_count()-1:
-                print(f"[{os.getpid()}] end_update: OK")
+            if update_ok.value == multiprocessing.cpu_count() - 1:
+                # print(f"[{os.getpid()}] end_update: OK")
                 update_ok.value = 0
                 event_compute_results.set()
 
     def looking_for_positions(
-        self,
-        position_id: int,
-        cond_looking_for_positions: multiprocessing.Condition,
-        mutex_positions: multiprocessing.Lock,
-        mutex_end_update: multiprocessing.Lock,
-        event_compute_results: multiprocessing.Event,
-        positions,
-        update_ok
+            self,
+            position_id: int,
+            cond_looking_for_positions: multiprocessing.Condition,
+            mutex_positions: multiprocessing.Lock,
+            mutex_end_update: multiprocessing.Lock,
+            event_compute_results: multiprocessing.Event,
+            positions,
+            update_ok
     ):
         """
-
-
         :param position_id:
         :param cond_looking_for_positions:
         :param mutex_positions:
@@ -141,7 +140,7 @@ class UpdateCells:
         """
 
         while self.__is_alive:
-            print(f"[{os.getpid()}] looking_for_positions: {position_id}")
+            # print(f"[{os.getpid()}] looking_for_positions: {position_id}")
             with cond_looking_for_positions:
                 cond_looking_for_positions.wait()
 
@@ -164,24 +163,22 @@ class UpdateCells:
             self.end_update(mutex_end_update, event_compute_results, update_ok)
 
     def update_cells(
-        self,
-        cond_looking_for_positions: multiprocessing.Condition,
-        event_compute_results: multiprocessing.Event,
-        positions
+            self,
+            cond_looking_for_positions: multiprocessing.Condition,
+            event_compute_results: multiprocessing.Event,
+            positions
     ):
         """
-
-
         :param cond_looking_for_positions:
         :param event_compute_results:
         :param positions:
         """
 
         while self.__is_alive:
-            print(f"[{os.getpid()}] update_cells")
+            # print(f"[{os.getpid()}] update_cells")
             duplication = self.universe.copy()
             _positions = np.argwhere(self.universe == 1)
-            _positions = np.array_split(_positions, multiprocessing.cpu_count()-1)
+            _positions = np.array_split(_positions, multiprocessing.cpu_count() - 1)
 
             positions[:] = [position for position in _positions]
 
@@ -220,28 +217,31 @@ class UpdateCells:
 
     def animate(self, i: int) -> np.ndarray:
         """
-
-
         :param i:
         :return:
         """
-
-        self.im.set_data(self.shared_universe)
-        return self.im
+        if PAUSE:
+            for process in self.list:
+                process.suspend()
+        if not PAUSE:
+            # for process in self.list:
+            #     process.resume()
+            self.iterations += 1
+            plt.title(f"Number of iterations : {self.iterations}")
+            self.im.set_data(self.shared_universe)
+            return self.im
 
     def run_animation(self, speed: int) -> None:
         """
-
-
         :param speed:
         """
+        self.fig.canvas.mpl_connect('button_press_event', on_click)
 
         _ = animation.FuncAnimation(self.fig, self.animate, interval=speed, repeat=True)
         plt.show()
 
     def run(self, speed: float) -> None:
         """
-
         :param speed:
         """
 
@@ -251,18 +251,16 @@ class UpdateCells:
 
 
 def looking_for_positions(
-    matrix: UpdateCells,
-    position_id: int,
-    cond_looking_for_positions: multiprocessing.Condition,
-    mutex_positions: multiprocessing.Lock,
-    mutex_end_update: multiprocessing.Lock,
-    event_compute_results: multiprocessing.Event,
-    positions,
-    update_ok
+        matrix: UpdateCells,
+        position_id: int,
+        cond_looking_for_positions: multiprocessing.Condition,
+        mutex_positions: multiprocessing.Lock,
+        mutex_end_update: multiprocessing.Lock,
+        event_compute_results: multiprocessing.Event,
+        positions,
+        update_ok
 ):
     """
-
-
     :param matrix:
     :param position_id:
     :param cond_looking_for_positions:
@@ -286,14 +284,12 @@ def looking_for_positions(
 
 
 def update_cells(
-    matrix: UpdateCells,
-    cond_looking_for_positions: multiprocessing.Condition,
-    event_compute_results: multiprocessing.Event,
-    positions
+        matrix: UpdateCells,
+        cond_looking_for_positions: multiprocessing.Condition,
+        event_compute_results: multiprocessing.Event,
+        positions
 ):
     """
-
-
     :param matrix:
     :param cond_looking_for_positions:
     :param event_compute_results:
@@ -306,3 +302,8 @@ def update_cells(
         event_compute_results,
         positions
     )
+
+
+def on_click(event):
+    global PAUSE
+    PAUSE ^= True
