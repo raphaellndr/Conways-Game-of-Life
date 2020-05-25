@@ -90,10 +90,10 @@ Choose your start :
 
 .. code-block:: console
 
-    $ python -m my_module -gs grid_size -beacon
-    $ python -m my_module -gs grid_size -blinker
-    $ python -m my_module -gs grid_size -toad
-    $ python -m my_module -gs grid_size -gosper_glider_gun
+    $ python -m my_module -gs grid_size -bc
+    $ python -m my_module -gs grid_size -bk
+    $ python -m my_module -gs grid_size -t
+    $ python -m my_module -gs grid_size -ggg
 
 What's next ?
 =============
