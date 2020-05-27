@@ -2,7 +2,6 @@ import multiprocessing
 import os
 import time
 import typing
-import psutil
 
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
@@ -48,8 +47,6 @@ class UpdateCells:
 
         self.iterations: int = 0
 
-        self.list = list()
-
     def _init_processes(self):
         global PROCESSES
 
@@ -77,8 +74,6 @@ class UpdateCells:
         # Start new processes
         for p in PROCESSES:
             p.start()
-            # m = psutil.Process(p.pid)
-            # self.list.append(m)
             time.sleep(0.1)
 
         # Wait for all processes to complete
@@ -221,11 +216,8 @@ class UpdateCells:
         :return:
         """
         if PAUSE:
-            for process in self.list:
-                process.suspend()
+            pass
         if not PAUSE:
-            # for process in self.list:
-            #     process.resume()
             self.iterations += 1
             plt.title(f"Number of iterations : {self.iterations}")
             self.im.set_data(self.shared_universe)
